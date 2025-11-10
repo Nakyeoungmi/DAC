@@ -2,12 +2,13 @@
 
 module tb_DAC;
     reg clk, rst;
-    reg [5:0] btn;
+    reg [5:0] btn;   // 6개 버튼 입력
     reg add_sel;
     wire dac_csn, dac_ldacn, dac_wrn, dac_a_b;
     wire [7:0] dac_d;
     wire [7:0] led_out;
 
+    // DUT (Device Under Test)
     DAC uut (
         .clk(clk),
         .rst(rst),
@@ -21,13 +22,15 @@ module tb_DAC;
         .led_out(led_out)
     );
 
+    // Clock generation (10ns period = 100MHz)
     always #5 clk = ~clk;
 
+    // 초기화 및 테스트 시나리오
     initial begin
         $dumpfile("DAC_tb.vcd");
         $dumpvars(0, tb_DAC);
 
-      
+        // 초기 상태
         clk = 0;
         rst = 0;
         btn = 6'b000000;
@@ -55,11 +58,11 @@ module tb_DAC;
         #100 btn = 6'b000010;
         #20 btn = 6'b000000;
 
-        // 버튼 9 (증가) 
+        // 버튼 9 (증가) → 가장 오른쪽 버튼으로 가정
         #100 btn = 6'b000001;
         #20 btn = 6'b000000;
 
-  
+        // 시뮬레이션 종료
         #500 $finish;
     end
 endmodule
